@@ -87,6 +87,7 @@ function [fR1, fR2s, fMT, fA, PPDw, PT1w, PMTw]  = hmri_create_MTProt(jobsubj) %
 flags = jobsubj.log.flags;
 flags.PopUp = false;
 hmri_log(sprintf('\t============ MPM PROCESSING - %s.m (%s) ============', mfilename, datestr(now)),flags);
+mouseMPM = true;
 
 % retrieves all required parameters for MPM processing
 mpm_params = get_mpm_params(jobsubj);
@@ -769,7 +770,7 @@ end
 % segmentation preferentially performed on MT map but can be done on R1 map
 % if no MT map available. Therefore, we must at least have R1 available,
 % i.e. both PDw and T1w inputs...
-if (mpm_params.QA.enable||(PDproc.calibr)) && (PDwidx && T1widx)
+if (mpm_params.QA.enable||(PDproc.calibr)) && (PDwidx && T1widx) && ~mouseMPM
     if ~isempty(fMT)
         Vsave = spm_vol(fMT);
         threshMT=threshall.MT;
@@ -869,11 +870,26 @@ if PDproc.T2scorr && (~isempty(fR2s)||~isempty(fR2s_OLS))
 end
 
 % PD map calculation continued
-if ~isempty(f_T) && ~isempty(fA) && exist('fTPM','var') && (mpm_params.UNICORT.PD || ~mpm_params.UNICORT.R1)
+if ~isempty(f_T) && ~isempty(fA) && (exist('fTPM','var') || mouseMPM) && (mpm_params.UNICORT.PD || ~mpm_params.UNICORT.R1)
     % if calibration enabled, do the Unified Segmentation bias correction
     % if required and calibrate the PD map
     if PDproc.calibr
-        PDcalculation(fA,fTPM,mpm_params);
+        if mouseMPM
+            % Proton density map calculation for the mouseMPM protocol. There are no
+            % fTPM maps and the bias field is estimated to be equal to the B1 field,
+            % because a transmit-receive cryoprobe is used.
+            hmri_log(sprintf('\t-------- Proton density map calculation --------'), mpm_params.nopuflags);
+            Y = spm_read_vols(spm_vol(fA));
+            for iDim = 1:dm(3)
+                M = M0*spm_matrix([0 0 iDim]);
+                f_T = spm_slice_vol(V_trans(2,:),V_trans(2,:).mat\M,dm(1:2),mpm_params.interp)/100; % divide by 100, since p.u. maps
+                Y(:,:,iDim) = Y(:,:,iDim) ./ f_T;
+            end
+            Vsave = spm_vol(fA);
+            spm_write_vol(Vsave,Y);
+        else
+            PDcalculation(fA,fTPM,mpm_params);
+        end
     end
 end
 
@@ -1034,6 +1050,7 @@ end
 spm_write_vol(Vsave,Y);
 
 end
+
 
 %% =======================================================================%
 % Sort out all parameters required for the MPM calculation. Check whether
