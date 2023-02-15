@@ -35,6 +35,9 @@ function [parValue, parLocation] = get_metadata_val_header(varargin)
         otherwise
           fprintf(1,'Not able to retrieve any value for parameter %s.\n', inParName);
       end
+    else
+        parValue{1} = [];
+        parLocation{1} = '';
     end
   else
       error('Invalid input arguments. Type help get_metadata_val for correct syntax.');
