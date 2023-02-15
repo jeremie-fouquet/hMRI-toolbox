@@ -295,12 +295,12 @@ hmri_def.qMRI_maps_thresh.MT       = 50;    % [p.u.]
 hmri_def.MPMacq.TE_mtw = [2:2.2:13]'; %#ok<*NBRAK> % [ms] defined as column vector!
 hmri_def.MPMacq.TE_t1w = [2:2.2:13]'; % [ms]
 hmri_def.MPMacq.TE_pdw = [2:2.2:13]'; % [ms]
-hmri_def.MPMacq.TR_mtw = 35; % [ms]
-hmri_def.MPMacq.TR_t1w = 35; % [ms]
-hmri_def.MPMacq.TR_pdw = 35; % [ms]
-hmri_def.MPMacq.fa_mtw = 12.5;    % [deg]
-hmri_def.MPMacq.fa_t1w = 32;   % [deg]
-hmri_def.MPMacq.fa_pdw = 12.5;    % [deg]
+hmri_def.MPMacq.TR_mtw = 26; % [ms]
+hmri_def.MPMacq.TR_t1w = 26; % [ms]
+hmri_def.MPMacq.TR_pdw = 26; % [ms]
+hmri_def.MPMacq.fa_mtw = 9.8;    % [deg]
+hmri_def.MPMacq.fa_t1w = 30;   % [deg]
+hmri_def.MPMacq.fa_pdw = 9.8;    % [deg]
 hmri_def.MPMacq.tag    = 'mouseMPM';
 
 % IMPREFECT RF SPOILING CORRECTION PARAMETERS 
@@ -367,7 +367,7 @@ hmri_def.MPMacq_set.vals{7}  = [25 25 6 21];
 % developped at the Douglas CIC
 hmri_def.MPMacq_set.names{8} = 'mouseMPM';
 hmri_def.MPMacq_set.tags{8}  = 'mouseMPM';
-hmri_def.MPMacq_set.vals{8}  = [35 35 12.5 32];
+hmri_def.MPMacq_set.vals{8}  = [26 26 9.8 30];
 
 % B) Defining the imperfect spoiling correction parameters for the
 % different protocols 
@@ -431,10 +431,10 @@ hmri_def.imperfectSpoilCorr.v3star.small_angle_approx = true;
 hmri_def.imperfectSpoilCorr.v3star.enabled = hmri_def.imperfectSpoilCorr.enabled;
 % 8) 150um mouseMPM protocol
 hmri_def.imperfectSpoilCorr.mouseMPM.tag = 'mouseMPM';
-hmri_def.imperfectSpoilCorr.mouseMPM.P2_a = [553.6014     -483.9393       98.9297];
-hmri_def.imperfectSpoilCorr.mouseMPM.P2_b = [-0.4538      0.3439      0.9371];
+hmri_def.imperfectSpoilCorr.mouseMPM.P2_a = [455.4001 -396.4118 81.1203];
+hmri_def.imperfectSpoilCorr.mouseMPM.P2_b = [-0.3906      0.2936      0.9462];
 hmri_def.imperfectSpoilCorr.mouseMPM.small_angle_approx = true;
-hmri_def.imperfectSpoilCorr.mouseMPM.enabled = hmri_def.imperfectSpoilCorr.enabled
+hmri_def.imperfectSpoilCorr.mouseMPM.enabled = hmri_def.imperfectSpoilCorr.enabled;
 % Unknown protocol
 hmri_def.imperfectSpoilCorr.Unknown.tag = 'Unknown protocol. No spoiling correction defined.';
 hmri_def.imperfectSpoilCorr.Unknown.enabled = false;
