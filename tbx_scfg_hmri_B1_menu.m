@@ -68,6 +68,18 @@ b1raw.num      = [2 30];
 % b1raw.val      = {''};
 
 % ---------------------------------------------------------------------
+% brain mask for B1
+% ---------------------------------------------------------------------
+b1brainmask          = cfg_files;
+b1brainmask.tag      = 'b1brainmask';
+b1brainmask.name     = 'Brain mask for B1';
+b1brainmask.help     = {'Select a brain mask in the same space as the B1 input files. Used only to correct B1 smoothing; no correction is made if unset.'};
+b1brainmask.filter   = 'image';
+b1brainmask.ufilter  = '.*';
+b1brainmask.num      = [0 1];
+b1brainmask.val      = {''};
+
+% ---------------------------------------------------------------------
 % B0 input images
 % ---------------------------------------------------------------------
 b0raw          = cfg_files;
@@ -110,7 +122,7 @@ b1_input_preproc.help      = {'Input pre-calculated B1 bias map.'
     ['The B1 map is expected to be in ' ...
     'percent units (p.u.) of the nominal flip angle. If this is not the case, ' ...
     'a scaling factor can be introduced (see Scaling factor description for more details).']};
-b1_input_preproc.val       = {b1raw scafac b1parameters};
+b1_input_preproc.val       = {b1raw scafac b1parameters b1brainmask};
 
 
 % ---------------------------------------------------------------------
@@ -121,7 +133,7 @@ b1_input_rfmap.tag       = 'rf_map';
 b1_input_rfmap.name      = 'rf_map';
 b1_input_rfmap.help      = {'Input B1 images for rf_map B1 map protocol.' ...
     'As B1 input, please select the pair of anatomical and precalculated B1 map, in that order.'};
-b1_input_rfmap.val       = {b1raw b1parameters};
+b1_input_rfmap.val       = {b1raw b1parameters b1brainmask};
 
 
 % ---------------------------------------------------------------------
@@ -132,7 +144,7 @@ b1_input_tfl.tag       = 'tfl_b1_map';
 b1_input_tfl.name      = 'tfl_b1_map';
 b1_input_tfl.help      = {'Input B1 images for TFL B1 map protocol.' ...
     'As B1 input, please select the pair of anatomical and precalculated B1 map, in that order.'};
-b1_input_tfl.val       = {b1raw b1parameters};
+b1_input_tfl.val       = {b1raw b1parameters b1brainmask};
 
 
 % ---------------------------------------------------------------------
@@ -146,7 +158,7 @@ b1_input_DAM.help      = {'Double Angle Method (DAM) protocol.' ...
     ['Regarding processing parameters, you can either stick with metadata and standard ' ...
     'defaults parameters (recommended) or select your own [hmri_b1_local_defaults_*.m] customised defaults file ' ...
     '(fallback for situations where no metadata are available).']};
-b1_input_DAM.val       = {b1raw b1parameters};
+b1_input_DAM.val       = {b1raw b1parameters b1brainmask};
 
 
 % ---------------------------------------------------------------------
@@ -160,7 +172,7 @@ b1_input_3DAFI.help      = {'3D Actual Flip Angle Imaging (AFI) protocol.' ...
     ['Regarding processing parameters, you can either stick with metadata and standard ' ...
     'defaults parameters (recommended) or select your own [hmri_b1_local_defaults_*.m] customised defaults file ' ...
     '(fallback for situations where no metadata are available).']};
-b1_input_3DAFI.val       = {b1raw b1parameters};
+b1_input_3DAFI.val       = {b1raw b1parameters b1brainmask};
 
 
 % ---------------------------------------------------------------------

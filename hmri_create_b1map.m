@@ -168,7 +168,7 @@ end
 B1map_norm = real(FAmap)*100/alphanom;
 
 % masking; mask is written out to folder of B1ref
-mask = mask_for_B1(spm_vol(B1ref),b1map_params.b1mask);
+mask = mask_for_B1(spm_vol(B1ref),b1map_params.b1mask, jobsubj);
 
 % smoothed map
 smB1map_norm = smoothB1(V1,B1map_norm,b1map_params.b1proc.B1FWHM,mask);
@@ -230,7 +230,7 @@ B1map = acosd(Y2./(2*Y1))/alphanom;
 B1map_norm = real(B1map)*100;
 
 % masking; mask is written out to folder of B1ref
-mask = mask_for_B1(spm_vol(B1ref),b1map_params.b1mask);
+mask = mask_for_B1(spm_vol(B1ref),b1map_params.b1mask,jobsubj);
 
 % smoothed map
 smB1map_norm = smoothB1(V1,B1map_norm,b1map_params.b1proc.B1FWHM,mask);
@@ -563,7 +563,7 @@ B1map_norm = (abs(Vol1)+offset)*scaling;
 
 % masking; mask is written out to folder of the anatomical image
 % (this should be outpath due to copying the anatomical file above)
-mask = mask_for_B1(V2,b1map_params.b1mask);
+mask = mask_for_B1(V2,b1map_params.b1mask,jobsubj);
 
 % smoothed map
 smB1map_norm = smoothB1(V1,B1map_norm,b1map_params.b1proc.B1FWHM,mask);
@@ -1068,11 +1068,20 @@ end
 %=========================================================================%
 % Mask for B1 map.
 %=========================================================================%
-function bmask = mask_for_B1(Vanat,flags)
-
-if flags.domask
+function bmask = mask_for_B1(Vanat,flags,jobsubj)
+switch flags.domask
+case true
     bmask=hmri_create_pm_brain_mask(Vanat,flags);
-else
+case 'file'
+    b1_type = fieldnames(jobsubj.b1_type);
+    b1brainmask_file = jobsubj.b1_type.(b1_type{1}).b1brainmask{1};
+    if isempty(b1brainmask_file)
+        bmask=true; % return a scalar
+    else
+        bmask=spm_vol(b1brainmask_file);
+        bmask=spm_read_vols(bmask);
+    end
+otherwise
     bmask=true; % return a scalar
 end
 
